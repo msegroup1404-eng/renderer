@@ -6,7 +6,7 @@ import sanitizeHtml from 'sanitize-html';
 
 import { blockKey, getRedisJSON, setRedisJSON } from '../cache';
 import { requireComponent } from './componentRegistry.server';
-import { renderToStaticMarkup } from 'react-dom/server'; // For HTML caching
+// import { renderToStaticMarkup } from 'react-dom/server'; // For HTML caching
 
 /**
  * This renderer expects a standard Puck `data` object in the new slots model:
@@ -47,7 +47,7 @@ async function renderNode(
   if (cachedHtml) {
     return <div key={nodeId} dangerouslySetInnerHTML={{ __html: cachedHtml }} />;
   }
-
+  console.log(type)
   const Comp = await requireComponent(type);
 
   // Prepare props: recurse on slot fields (arrays of {type, props})
@@ -69,10 +69,10 @@ async function renderNode(
 
   const element = React.createElement(Comp, { key: nodeId, ...props });
 
-  if (cacheKey) {
-    const html = renderToStaticMarkup(element);
-    await setRedisJSON(cacheKey, { html }, 3600); // 1 hour TTL
-  }
+  // if (cacheKey) {
+  //   const html = renderToStaticMarkup(element);
+  //   await setRedisJSON(cacheKey, { html }, 3600); // 1 hour TTL
+  // }
 
   return element;
 }

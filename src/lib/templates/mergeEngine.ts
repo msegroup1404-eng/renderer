@@ -44,13 +44,17 @@ function applyDefaults(data: TemplateSnapshot, defaults: Record<string, any> = {
 function arrayMerge(dest: any[], src: any[]) {
   if (!src.length) return dest || [];
   if (!dest?.length) return src;
-  if (!src[0]?.id) return src;
-
-  const map = new Map(dest.map(d => [d.id, d]));
+  
+  // Check if any element has an ID (in props or at root)
+  const hasIds = src.some(item => item.id || item.props?.id);
+  if (!hasIds) return src;
+  
+  const map = new Map(dest.map(d => [d.props?.id || d.id, d]));
   for (const s of src) {
-    if (s.id) {
-      const existing = map.get(s.id) || {};
-      map.set(s.id, deepmerge(existing, s, { arrayMerge }));
+    const id = s.props?.id || s.id;
+    if (id) {
+      const existing = map.get(id) || {};
+      map.set(id, deepmerge(existing, s, { arrayMerge }));
     }
   }
   return Array.from(map.values());

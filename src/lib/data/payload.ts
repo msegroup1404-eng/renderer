@@ -1,5 +1,8 @@
 const PAYLOAD_URL = process.env.PAYLOAD_URL || 'http://localhost:4000'
 const PAYLOAD_TOKEN = process.env.PAYLOAD_TOKEN || ''
+import templateSnapshot from '../../templates/snapshots/new.json'
+import pageOverrides from '../../templates/snapshots/page-override.json'
+import tenantOverrides from '../../templates/snapshots/tenant-override.json'
 
 async function payloadGet(path: string) {
   const url = path.startsWith('http') ? path : `${PAYLOAD_URL}/api${path.startsWith('/') ? path : '/' + path}`
@@ -34,11 +37,6 @@ export async function fetchTemplateSnapshotFromPayload(tenantId: string, templat
 }
 
 export async function fetchTemplateSnapshotFromJson() {
-  const templateResponse = await fetch("../../templates/snapshots/new.json");
-  const pageOverrideResponse = await fetch("../../templates/snapshots/new.json");
-  const tenantOverrideResponse = await fetch("../../templates/snapshots/new.json");
-  const template = await templateResponse.json();
-  const pageOverrides = await pageOverrideResponse.json();
-  const tenantOverrides = await tenantOverrideResponse.json();
-  return { template, pageOverrides, tenantOverrides }
+
+  return { templateSnapshot, pageOverrides, tenantOverrides }
 }

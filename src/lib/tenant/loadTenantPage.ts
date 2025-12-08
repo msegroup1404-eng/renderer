@@ -80,14 +80,14 @@ export async function loadTenantPage(
     tenant.template ||
     null;
 
-  // let templateSnapshot: any = null;
-  // if (templateId) {
-  //   // templateSnapshot = await fetchTemplateSnapshotFromPayload(tenant.slug || tenant.id || tenant._id, templateId);
-  //   templateSnapshot = safeDeserialize(templateSnapshot);
-  // }
-  const { template: templateSnapshot, tenantOverrides, pageOverrides } = await fetchTemplateSnapshotFromJson();
+  let templateSnapshot: any = null;
+  if (templateId) {
+    // templateSnapshot = await fetchTemplateSnapshotFromPayload(tenant.slug || tenant.id || tenant._id, templateId);
+    templateSnapshot = safeDeserialize(templateSnapshot);
+  }
+  // const { template: templateSnapshot, tenantOverrides, pageOverrides } = await fetchTemplateSnapshotFromJson();
 
-  // const tenantOverrides = tenant.templateOverrides ?? tenant.themeTokens ?? null;
+  const tenantOverrides = tenant.templateOverrides ?? tenant.themeTokens ?? null;
 
   // TODO: must be fixed
   const merged = mergeTemplateWithPage(templateSnapshot, tenantOverrides ?? {}, pageData ?? {});
